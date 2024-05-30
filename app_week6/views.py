@@ -164,16 +164,36 @@ def thesis_detail(request, thesis_id):
         return redirect('home')
 
 
+
+@login_required
+def edit_thesis(request, thesis_id):
+    thesis = Thesis.objects.get(pk=thesis_id)
+    if (request.user.user_type == 4):
+        if request.method == 'POST':
+            form = ThesisForm(request.POST, instance=thesis)
+            if form.is_valid():
+                form.save()
+                return redirect('view_theses')
+        else:
+            form = ThesisForm(instance=thesis)
+        return render(request, 'app_week6/edit_thesis.html', {'form': form})
+    else:
+        messages.error(request, "Not authorized to view thesis")
+        return redirect('home')
+
+
+
+
 @login_required
 def request_join(request, thesis_id):
     if ((request.user.user_type == 4) or (request.user.user_type == 1)):
         thesis = Thesis.objects.get(pk=thesis_id)
         thesis.interested.add(request.user)
         messages.success(request, "Request sent successfully")
-        return redirect('home')
+        return redirect('view_theses')
     else:
         messages.error(request, "Not authorized to request to join")
-        return redirect('home')
+        return redirect('view_theses')
 
 
 @login_required
@@ -196,7 +216,7 @@ def approve_student(request, thesis_id, student_id):
 
         else:
             messages.error(request, "Not authorized to approve a student")
-            return redirect('home')
+            return redirect('view_theses')
     else:
         messages.error(request, "Invalid request")
         return HttpResponseRedirect(request.path_info)

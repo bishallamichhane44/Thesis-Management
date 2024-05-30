@@ -38,7 +38,8 @@ urlpatterns = [
     path('upload_thesis/', views.upload_thesis, name='upload_thesis'),
     path('approve_thesis/', views.approve_thesis, name='approve_thesis'),
     path('view_theses/', views.view_theses, name='view_theses'),
-
+    path('edit_thesis/<int:thesis_id>/', views.edit_thesis, name='edit_thesis'),
+    
     path('create_group/', views.create_group, name='create_group'),
 
     path('approve/<int:thesis_id>/', views.approve, name='approve'),

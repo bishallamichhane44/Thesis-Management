@@ -29,7 +29,11 @@
             
         </div>
         {% endif %}
+
+
+
     </div>
+ 
     <div class="flex flex-col items-center justify-center w-1/2 mb-6">
         <div class="flex flex-col items-center justify-center border border-gray-400 rounded-md p-4">
             <h2 class="text-2xl font-bold text-gray-700">Overview</h2>
@@ -46,6 +50,12 @@
             </p>
             {% endfor %}
         </div>
+
+        {% if user.user_type == 4 %}
+        <div class="flex justify-center py-4 px-4 border-t-2 border-b-2 border-gray-400 w-auto text-white bg-green-600 hover:bg-green-700 my-6">
+            <a href="{% url 'edit_thesis' thesis.id %}" class="text-white hover:text-white font-bold uppercase tracking-wide">Edit</a>
+        </div>
+        {% endif %}
     </div>
 </div>
 

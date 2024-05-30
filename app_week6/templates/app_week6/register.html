@@ -1,8 +1,15 @@
 {% extends 'app_week6/base.html' %}
 
 {% block content %}
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-8">
+<div class="relative flex justify-center items-center min-h-screen bg-gray-100 overflow-hidden">
+    <!-- Background blobs -->
+    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform -translate-x-1/2 translate-y-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-64 h-64 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform translate-x-1/2 translate-y-1/2"></div>
+
+    <!-- Main content -->
+    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-8 z-10">
         <form method="POST" novalidate>
             {% csrf_token %}
             <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
@@ -28,30 +35,23 @@
                         <p class="text-red-500 text-xs italic">{{ form.password2.errors }}</p>
                     {% endif %}
                 </div>
-				
 
                 <!-- 
-					To allow anyone to create any user type account
-
-
-					
-
+                    Lets any new user create account as any role.
                 -->
-
-
                 <div>
-                    <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.user_types.label }}</label>
+                    <label for="{{ form.user_type.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.user_type.label }}</label>
                     {{ form.user_type }}
                     {% if form.user_type.errors %}
                         <p class="text-red-500 text-xs italic">{{ form.user_type.errors }}</p>
                     {% endif %}
                 </div>
 
-				<!-- 
-					To allow new users to create only student account
-                -->
-				<!-- 
-					<div class="mt-4">
+                <!-- 
+                   Lets new user create account only as student
+                
+
+                <div class="mt-4">
 					<label for="{{ form.user_type.id_for_label }}" class="block text-sm font-medium text-gray-700">
 						{{ form.user_type.label }}
 					</label>
@@ -66,10 +66,8 @@
 						<p class="text-red-500 text-xs italic">{{ form.user_type.errors }}</p>
 					{% endif %}
 				</div>
-			-->
 
-
-
+                -->
 
 
             </div>

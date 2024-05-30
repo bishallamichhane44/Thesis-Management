@@ -31,6 +31,7 @@ from app_week6 import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('blank/',views.blank,name='blank'),
     path('login/', views.login_view, name="login"),
     path('logout/', views.logout_view, name="logout"),
     path('admin/', admin.site.urls),

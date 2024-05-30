@@ -56,7 +56,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'You have signed up successfully.')
-            return redirect('home')
+            return redirect('blank')
         else:
             cleaned_data = form.cleaned_data
             print("Form Response invalid:", cleaned_data)
@@ -76,7 +76,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('blank')
             else:
                 messages.error(request, 'Invalid credentials')
                 return redirect('home')
@@ -104,7 +104,9 @@ def upload_thesis(request):
         else:
             form = ThesisForm()
         return render(request, 'app_week6/upload_thesis.html', {'form': form})
-    return redirect('home')
+    else:
+        messages.error(request, "Not authorized to upload a thesis")
+    return redirect('blank')
 
 @login_required
 def approve_thesis(request):
@@ -113,7 +115,7 @@ def approve_thesis(request):
         return render(request, 'app_week6/approve_thesis.html', {'theses': theses})
     if ((request.user.user_type != 3) and (request.user.user_type != 1)):
         messages.error(request, "Not authorized to approve a thesis")
-    return redirect('home')
+    return redirect('blank')
 
 
 @login_required
@@ -136,13 +138,13 @@ def create_group(request):
         return render(request, 'app_week6/create_group.html', {'form': form})
     if ((request.user.user_type != 2) and (request.user.user_type != 1)):
         messages.error(request, "Not authorized to create a group")
-        return redirect('home')
+        return redirect('blank')
 
 
-
-
+def blank(request):
+    return render(request, 'app_week6/blank.html')
 def home(request):
-    return render(request, 'app_week6/base.html')
+    return render(request, 'app_week6/home.html')
 
 @login_required
 def approve(request, thesis_id):
@@ -151,7 +153,7 @@ def approve(request, thesis_id):
         thesis.is_approved = True
         thesis.save()
         return redirect('view_theses')
-    return redirect('home')
+    return redirect('blank')
 
 
 @login_required
@@ -161,7 +163,7 @@ def thesis_detail(request, thesis_id):
         return render(request, 'app_week6/thesis_detail.html', {'thesis': thesis})
     else:
         messages.error(request, "Not authorized to view thesis")
-        return redirect('home')
+        return redirect('blank')
 
 
 
@@ -229,4 +231,4 @@ def your_theses(request):
         return render(request, 'app_week6/your_theses.html', {'theses': theses})
     else:
         messages.error(request, "Not authorized to view  theses")
-        return redirect('home')
+        return redirect('blank')

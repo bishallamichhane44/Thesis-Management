@@ -1,0 +1,47 @@
+{% extends 'app_week6/base.html' %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <div class="bg-blue-600 py-16">
+        <div class="container mx-auto px-6 text-center text-white">
+            <h1 class="text-4xl font-bold mb-4">Welcome to Thesis Management System</h1>
+            <p class="text-xl mb-8">Easily manage and track your thesis projects with our efficient system</p>
+            <a href="{% url 'login' %}" class="bg-white text-blue-600 font-semibold py-2 px-4 rounded-md shadow-md hover:bg-gray-200">
+                Upload Your Thesis
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="text-center">
+                <img src="https://source.unsplash.com/1600x900/?document" alt="Document Management" class="mx-auto mb-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Document Management</h3>
+                <p class="text-gray-600">Efficiently manage and organize your thesis documents in one place.</p>
+            </div>
+            <div class="text-center">
+                <img src="https://source.unsplash.com/1600x900/?collaboration" alt="Collaboration" class="mx-auto mb-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Collaboration</h3>
+                <p class="text-gray-600">Collaborate with your advisors and peers seamlessly.</p>
+            </div>
+            <div class="text-center">
+                <img src="https://source.unsplash.com/1600x900/?security" alt="Security" class="mx-auto mb-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-2">Security</h3>
+                <p class="text-gray-600">Keep your thesis projects secure with our robust security features.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="bg-gray-100 py-16">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-4">Get Started Today</h2>
+            <p class="text-xl mb-8">Join us and make your thesis management easier than ever.</p>
+            <a href="{% url 'register' %}" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:bg-blue-700">
+                Create an Account
+            </a>
+        </div>
+    </div>
+{% endblock content %}

@@ -5,32 +5,35 @@
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css">
 </head>
 <body class="h-screen bg-gray-100">
-    <header class="bg-gray-800 text-white p-4 flex justify-between">
+    <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h1 class="text-4xl font-bold">Thesis Management</h1>
-
-        {% if user.user_type == 1 %}
-        <p class="mr-4">You are logged in as Admin</p>
-        {% endif %}
-        {% if user.user_type == 2 %}
-        <p class="mr-4">You are logged in as Supervisor</p>
-        {% endif %}
-        {% if user.user_type == 3 %}
-        <p class="mr-4">You are logged in as Project Coordinator</p>
-        {% endif %}
-        {% if user.user_type == 4 %}
-        <p class="mr-4">You are logged in as Student</p>
-        {% endif %}
-
-        
-        <div class="flex items-center">
+    
+        <div class="flex items-center space-x-4">
+            {% if user.user_type == 1 %}
+            <p class="bg-gray-700 py-2 px-3 rounded-lg">Admin</p>
+            {% elif user.user_type == 2 %}
+            <p class="bg-gray-700 py-2 px-3 rounded-lg">Supervisor</p>
+            {% elif user.user_type == 3 %}
+            <p class="bg-gray-700 py-2 px-3 rounded-lg">Project Coordinator</p>
+            {% elif user.user_type == 4 %}
+            <p class="bg-gray-700 py-2 px-3 rounded-lg">Student</p>
+            {% endif %}
+    
             {% if user.is_authenticated %}
-            <p class="mr-4">{{ user.username }}</p>
-            <a href="{% url 'logout' %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded">Log out</a>
+            <div class="flex items-center space-x-4">
+                <p class="text-gray-300">{{ user.username }}</p>
+                <a href="{% url 'logout' %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300">
+                    Log out
+                </a>
+            </div>
             {% else %}
-            <a href="{% url 'login' %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded">Log In</a>
+            <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+                Log In
+            </a>
             {% endif %}
         </div>
     </header>
+    
 
  
     <div class="flex flex-wrap justify-center">{% include "app_week6/alert.html" %}</div>
@@ -38,16 +41,22 @@
 
     <nav class="bg-gray-200 p-4">
         <ul class="flex flex-wrap justify-center">
+            {% if not user.is_authenticated %}
             <li class="mr-4"><a href="{% url 'home' %}" class="text-gray-800 px-4 py-2 rounded">Home</a></li>
             <li class="mr-4"><a href="{% url 'register' %}" class="text-gray-800 px-4 py-2 rounded">Register</a></li>
+            {% endif %}
             {% if not user.user_type == 4%}
+            {% if user.is_authenticated %}
             <li class="mr-4"><a href="{% url 'upload_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Upload Thesis</a></li>
             <li class="mr-4"><a href="{% url 'approve_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Approve Theses</a></li>
             {% endif %}
+            {% endif %}
+            {% if user.is_authenticated %}
             <li class="mr-4"><a href="{% url 'view_theses' %}" class="text-gray-800 px-4 py-2 rounded">View Theses</a></li>
             <li class="mr-4"><a href="{% url 'create_group' %}" class="text-gray-800 px-4 py-2 rounded">Create Group</a></li>
             {% if user.user_type == 4 %}
             <li class="mr-4"><a href="{% url 'your_theses' %}" class="text-gray-800 px-4 py-2 rounded">Your Theses</a></li>
+            {% endif %}
             {% endif %}
             
         </ul>

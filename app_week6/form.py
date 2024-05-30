@@ -27,7 +27,7 @@ class UserLoginForm(forms.Form):
 class ThesisForm(forms.ModelForm):
     class Meta:
         model = Thesis
-        fields = ['title', 'description']
+        fields = ['title', 'description','category','software_engineering','Information_Systems_and_Data_Science','Mechanical_Engineering','Civil_and_Structural_Engineering','Chemical_Engineering','External','Internal_Sydney','Internal_Casuarina']
 
 class GroupForm(forms.ModelForm):
     class Meta:

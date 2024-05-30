@@ -205,15 +205,19 @@ def approve_student(request, thesis_id, student_id):
         student = User.objects.get(pk=student_id)
         thesis = Thesis.objects.get(pk=thesis_id)
         if ((request.user.user_type == 2)):
-            print(thesis.students.count())
-            if (thesis.students.count() < 5):
-                thesis.students.add(student)
-                thesis.interested.remove(student)
-                thesis.save()
-                messages.success(request, "Student added successfully")
-                return redirect('view_theses')
+            if(request.user.username == thesis.supervisor.username):
+                print(thesis.students.count())
+                if (thesis.students.count() < 5):
+                    thesis.students.add(student)
+                    thesis.interested.remove(student)
+                    thesis.save()
+                    messages.success(request, "Student added successfully")
+                    return redirect('view_theses')
+                else:
+                    messages.error(request, "Cannot Add more than 5 students")
+                    return redirect('view_theses')
             else:
-                messages.error(request, "Cannot Add more than 5 students")
+                messages.error(request, "You are not the respective supervisor")
                 return redirect('view_theses')
 
         else:

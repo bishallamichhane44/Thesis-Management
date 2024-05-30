@@ -21,8 +21,8 @@ class Thesis(models.Model):
     description = models.TextField()
     supervisor = models.ForeignKey(User, limit_choices_to={'user_type': 2}, on_delete=models.CASCADE)
     is_approved = models.BooleanField(default=False)
-    students = models.ManyToManyField(User, related_name='theses', limit_choices_to={'user_type': 4})
-    interested = models.ManyToManyField(User, related_name='interested_theses', limit_choices_to={'user_type': 4})
+    students = models.ManyToManyField(User, related_name='theses', limit_choices_to={'user_type': 4}, blank=True, null=True)
+    interested = models.ManyToManyField(User, related_name='interested_theses', limit_choices_to={'user_type': 4},blank=True, null=True)
 
 
     def __str__(self):
@@ -32,3 +32,7 @@ class Group(models.Model):
     name = models.CharField(max_length=255)
     members = models.ManyToManyField(User, limit_choices_to={'user_type': 4})
     thesis = models.ForeignKey(Thesis, on_delete=models.CASCADE, limit_choices_to={'is_approved': True})
+
+
+    def __str__(self):
+        return self.name

@@ -45,6 +45,8 @@ from .form import UserRegistrationForm, ThesisForm, GroupForm
 from .models import Thesis, Group,User
 from .form import UserLoginForm
 from django.contrib import messages
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 
 def register(request):
@@ -181,14 +183,30 @@ def approve_student(request, thesis_id, student_id):
         student = User.objects.get(pk=student_id)
         thesis = Thesis.objects.get(pk=thesis_id)
         if ((request.user.user_type == 2)):
-            thesis.students.add(student)
-            thesis.interested.remove(student)
-            thesis.save()
-            messages.success(request, "Student added successfully")
-            return redirect('view_theses')
+            print(thesis.students.count())
+            if (thesis.students.count() < 5):
+                thesis.students.add(student)
+                thesis.interested.remove(student)
+                thesis.save()
+                messages.success(request, "Student added successfully")
+                return redirect('view_theses')
+            else:
+                messages.error(request, "Cannot Add more than 5 students")
+                return redirect('view_theses')
+
         else:
             messages.error(request, "Not authorized to approve a student")
             return redirect('home')
     else:
         messages.error(request, "Invalid request")
+        return HttpResponseRedirect(request.path_info)
+
+
+@login_required
+def your_theses(request):
+    if ((request.user.user_type == 4)):
+        theses = Thesis.objects.filter(students__in=[request.user])
+        return render(request, 'app_week6/your_theses.html', {'theses': theses})
+    else:
+        messages.error(request, "Not authorized to view  theses")
         return redirect('home')

@@ -38,11 +38,14 @@ urlpatterns = [
     path('upload_thesis/', views.upload_thesis, name='upload_thesis'),
     path('approve_thesis/', views.approve_thesis, name='approve_thesis'),
     path('view_theses/', views.view_theses, name='view_theses'),
+
     path('create_group/', views.create_group, name='create_group'),
+
     path('approve/<int:thesis_id>/', views.approve, name='approve'),
     path('request_to_join/<int:thesis_id>/', views.request_join, name='request_to_join'),
     path('view_theses/<int:thesis_id>/', views.thesis_detail, name='view_theses'),
     path('approve_student/<int:thesis_id>/<int:student_id>/', views.approve_student, name='approve_student'),
+    path('your_theses/', views.your_theses, name='your_theses'),
     
 ]
 

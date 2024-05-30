@@ -5,18 +5,21 @@
     <ul class="flex flex-col items-center justify-center w-1/2 mb-6">
         {% for thesis in theses %}
         <li  class="flex flex-col items-center justify-center w-full p-4 my-2 border border-gray-400 rounded-md" >
-            <h3 class="text-2xl font-bold text-gray-700">{{ thesis.title }}</h3>
+
+
+            
+
+            
+            <h3 class="text-2xl {% if user in thesis.students.all %}text-green-600{% else %}text-gray-700{% endif %} font-bold">{{ thesis.title }}</h3>
             <p class="text-gray-600">{{ thesis.description|truncatechars:50 }}</p>
             <a href="{% url 'view_theses' thesis.id %}" class="text-blue-600 hover:text-blue-800 px-4 py-2 rounded-full bg-gray-200 w-max cursor-pointer">View Detail</a>
 
+
             {% if user.user_type == 1 or user.user_type == 4 %}
-            <a href="{% url 'request_to_join' thesis.id %}" class="text-blue-600 hover:text-blue-800 px-4 py-2 rounded-full bg-gray-200 w-max cursor-pointer">Request to join</a>
+                {% if not user in thesis.students.all %}
+                <a href="{% url 'request_to_join' thesis.id %}" class="text-blue-600 hover:text-blue-800 px-4 py-2 rounded-full bg-gray-200 w-max cursor-pointer">Request to join</a>
+                {% endif %}
             {% endif %}
-        
-        
-            
-            
-            
         </li>
         {% endfor %}
     </ul>

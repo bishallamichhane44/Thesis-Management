@@ -32,16 +32,24 @@
         </div>
     </header>
 
-    {% include "app_week6/alert.html" %}
+ 
+    <div class="flex flex-wrap justify-center">{% include "app_week6/alert.html" %}</div>
+    
 
     <nav class="bg-gray-200 p-4">
         <ul class="flex flex-wrap justify-center">
             <li class="mr-4"><a href="{% url 'home' %}" class="text-gray-800 px-4 py-2 rounded">Home</a></li>
             <li class="mr-4"><a href="{% url 'register' %}" class="text-gray-800 px-4 py-2 rounded">Register</a></li>
+            {% if not user.user_type == 4%}
             <li class="mr-4"><a href="{% url 'upload_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Upload Thesis</a></li>
             <li class="mr-4"><a href="{% url 'approve_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Approve Theses</a></li>
+            {% endif %}
             <li class="mr-4"><a href="{% url 'view_theses' %}" class="text-gray-800 px-4 py-2 rounded">View Theses</a></li>
             <li class="mr-4"><a href="{% url 'create_group' %}" class="text-gray-800 px-4 py-2 rounded">Create Group</a></li>
+            {% if user.user_type == 4 %}
+            <li class="mr-4"><a href="{% url 'your_theses' %}" class="text-gray-800 px-4 py-2 rounded">Your Theses</a></li>
+            {% endif %}
+            
         </ul>
     </nav>
 

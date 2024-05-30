@@ -42,7 +42,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .form import UserRegistrationForm, ThesisForm, GroupForm
-from .models import Thesis, Group
+from .models import Thesis, Group,User
 from .form import UserLoginForm
 from django.contrib import messages
 
@@ -159,4 +159,36 @@ def thesis_detail(request, thesis_id):
         return render(request, 'app_week6/thesis_detail.html', {'thesis': thesis})
     else:
         messages.error(request, "Not authorized to view thesis")
+        return redirect('home')
+
+
+@login_required
+def request_join(request, thesis_id):
+    if ((request.user.user_type == 4) or (request.user.user_type == 1)):
+        thesis = Thesis.objects.get(pk=thesis_id)
+        thesis.interested.add(request.user)
+        messages.success(request, "Request sent successfully")
+        return redirect('home')
+    else:
+        messages.error(request, "Not authorized to request to join")
+        return redirect('home')
+
+
+@login_required
+def approve_student(request, thesis_id, student_id):    
+    
+    if request.method == 'GET':
+        student = User.objects.get(pk=student_id)
+        thesis = Thesis.objects.get(pk=thesis_id)
+        if ((request.user.user_type == 2)):
+            thesis.students.add(student)
+            thesis.interested.remove(student)
+            thesis.save()
+            messages.success(request, "Student added successfully")
+            return redirect('view_theses')
+        else:
+            messages.error(request, "Not authorized to approve a student")
+            return redirect('home')
+    else:
+        messages.error(request, "Invalid request")
         return redirect('home')

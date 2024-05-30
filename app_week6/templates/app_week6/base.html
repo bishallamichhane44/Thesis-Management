@@ -7,7 +7,21 @@
 <body class="h-screen bg-gray-100">
     <header class="bg-gray-800 text-white p-4 flex justify-between">
         <h1 class="text-4xl font-bold">Thesis Management</h1>
-        <p class="mr-4">You are logged in as a {{ user.user_type }}.</p>
+
+        {% if user.user_type == 1 %}
+        <p class="mr-4">You are logged in as Admin</p>
+        {% endif %}
+        {% if user.user_type == 2 %}
+        <p class="mr-4">You are logged in as Supervisor</p>
+        {% endif %}
+        {% if user.user_type == 3 %}
+        <p class="mr-4">You are logged in as Project Coordinator</p>
+        {% endif %}
+        {% if user.user_type == 4 %}
+        <p class="mr-4">You are logged in as Student</p>
+        {% endif %}
+
+        
         <div class="flex items-center">
             {% if user.is_authenticated %}
             <p class="mr-4">{{ user.username }}</p>

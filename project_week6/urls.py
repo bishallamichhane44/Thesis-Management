@@ -40,7 +40,10 @@ urlpatterns = [
     path('view_theses/', views.view_theses, name='view_theses'),
     path('create_group/', views.create_group, name='create_group'),
     path('approve/<int:thesis_id>/', views.approve, name='approve'),
+    path('request_to_join/<int:thesis_id>/', views.request_join, name='request_to_join'),
     path('view_theses/<int:thesis_id>/', views.thesis_detail, name='view_theses'),
+    path('approve_student/<int:thesis_id>/<int:student_id>/', views.approve_student, name='approve_student'),
+    
 ]
 
 

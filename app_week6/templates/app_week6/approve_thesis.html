@@ -1,0 +1,21 @@
+{% extends 'app_week6/base.html' %}
+
+{% block content %}
+
+    <div class="flex flex-col items-center justify-center p-4">
+        <h2 class="text-4xl font-bold text-gray-700 mb-6">Approve Thesis</h2>
+        <ul class="flex flex-col items-center justify-center w-1/2 mb-6">
+            {% for thesis in theses %}
+            <li class="flex items-center justify-between w-full p-4 my-2 border border-gray-400 rounded-md">
+                <div class="flex-1">{{ thesis.title }}</div>
+                <div class="flex items-center">
+                    <a href="{% url 'view_theses' thesis.id %}" class="text-blue-600 hover:text-blue-800">View</a>
+                    <span class="mx-4">|</span>
+                    <a href="{% url 'approve' thesis.id %}" class="text-blue-600 hover:text-blue-800">Approve</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

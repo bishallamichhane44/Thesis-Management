@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thesis Management</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css">
+</head>
+<body class="h-screen bg-gray-100">
+    <header class="bg-gray-800 text-white p-4 flex justify-between">
+        <h1 class="text-4xl font-bold">Thesis Management</h1>
+        <p class="mr-4">You are logged in as a {{ user.user_type }}.</p>
+        <div class="flex items-center">
+            {% if user.is_authenticated %}
+            <p class="mr-4">{{ user.username }}</p>
+            <a href="{% url 'logout' %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded">Log out</a>
+            {% else %}
+            <a href="{% url 'login' %}" class="bg-gray-200 text-gray-800 px-4 py-2 rounded">Log In</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% include "app_week6/alert.html" %}
+
+    <nav class="bg-gray-200 p-4">
+        <ul class="flex flex-wrap justify-center">
+            <li class="mr-4"><a href="{% url 'home' %}" class="text-gray-800 px-4 py-2 rounded">Home</a></li>
+            <li class="mr-4"><a href="{% url 'register' %}" class="text-gray-800 px-4 py-2 rounded">Register</a></li>
+            <li class="mr-4"><a href="{% url 'upload_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Upload Thesis</a></li>
+            <li class="mr-4"><a href="{% url 'approve_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Approve Theses</a></li>
+            <li class="mr-4"><a href="{% url 'view_theses' %}" class="text-gray-800 px-4 py-2 rounded">View Theses</a></li>
+            <li class="mr-4"><a href="{% url 'create_group' %}" class="text-gray-800 px-4 py-2 rounded">Create Group</a></li>
+        </ul>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+</body>
+</html>
+

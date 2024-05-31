@@ -53,7 +53,9 @@
             {% endif %}
             {% if user.is_authenticated %}
             <li class="mr-4"><a href="{% url 'view_theses' %}" class="text-gray-800 px-4 py-2 rounded">View Theses</a></li>
+            {% if user.user_type == 5 %}
             <li class="mr-4"><a href="{% url 'create_group' %}" class="text-gray-800 px-4 py-2 rounded">Create Group</a></li>
+            {% endif %}
             {% if user.user_type == 4 %}
             <li class="mr-4"><a href="{% url 'your_theses' %}" class="text-gray-800 px-4 py-2 rounded">Your Theses</a></li>
             {% endif %}

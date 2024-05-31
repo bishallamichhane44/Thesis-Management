@@ -144,7 +144,7 @@ def thesis_detail(request, thesis_id):
 @login_required
 def edit_thesis(request, thesis_id):
     thesis = Thesis.objects.get(pk=thesis_id)
-    if (request.user.user_type == 4 or request.user.user_type == 3):
+    if ( request.user.user_type == 3):
         if request.method == 'POST':
             form = ThesisForm(request.POST, instance=thesis)
             if form.is_valid():
@@ -154,7 +154,7 @@ def edit_thesis(request, thesis_id):
             form = ThesisForm(instance=thesis)
         return render(request, 'app_week6/edit_thesis.html', {'form': form})
     else:
-        messages.error(request, "Not authorized to view thesis")
+        messages.error(request, "Not authorized to edit thesis")
         return redirect('home')
 
 
@@ -178,8 +178,8 @@ def approve_student(request, thesis_id, student_id):
     if request.method == 'GET':
         student = User.objects.get(pk=student_id)
         thesis = Thesis.objects.get(pk=thesis_id)
-        if ((request.user.user_type == 2)):
-            if(request.user.username == thesis.supervisor.username):
+        if ((request.user.user_type == 2) or (request.user.user_type == 3)):
+            if((request.user.username == thesis.supervisor.username)or(request.user.user_type == 3)):
                 print(thesis.students.count())
                 if (thesis.students.count() < 5):
                     thesis.students.add(student)

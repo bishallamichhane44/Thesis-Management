@@ -1,43 +1,3 @@
-# from django.shortcuts import render
-
-# # Create your views here.
-
-
-# # Expanded sample data with real thesis details
-# mock_theses = [
-#     {'id': 1, 'title': 'Machine learning approaches for Cyber Security', 'supervisor': 'Bharanidharan Shanmugam', 'short_description': 'Exploring machine learning in cyber security for risk modelling and prediction.', 'long_description': 'As we use the internet more, the data produced by us is enormous. But are these data being secure? The goal of applying machine learning or intelligence is to better risk modelling and prediction and for an informed decision support. Students will be working with either supervised or unsupervised machine learning approaches to solve the problem/s in the broader areas of Cyber Security.'},
-#     {'id': 2, 'title': 'Informetrics applications in multidisciplinary domain', 'supervisor': 'Yakub Sebastian', 'short_description': 'Quantitative studies of information in multidisciplinary research.', 'long_description': 'Informetrics studies are concerned with the quantitative aspects of information. The applications of advanced machine learning, information retrieval, network science, and bibliometric techniques on various information artifacts have contributed fresh insights into the evolutionary nature of research fields. This project aims at discovering informetric properties of multidisciplinary research literature using various machine learning, network analysis, data visualization, and data wrangling tools.'},
-#     {'id': 3, 'title': 'Development of a Virtual Reality System to Test Binaural Hearing', 'supervisor': 'Sami Azam', 'short_description': 'Designing a VR system to test binaural hearing abilities.', 'long_description': 'A virtual reality system could be used to objectively test the binaural hearing ability of humans (the ability to hear stereo and locate the direction and distance of sound). This project aims to design, implement and evaluate a VR system using standard off-the-shelf components (VR goggle and headphones) and standard programming techniques.'},
-#     {'id': 4, 'title': 'Current trends on cryptomining and its potential impact on cryptocurrencies', 'supervisor': 'Sami Azam', 'short_description': 'Exploring cryptomining trends and their impact on cryptocurrencies.', 'long_description': 'Cryptomining is the process of mining cryptocurrencies by running a sequence of algorithms. Traditionally, to mine new crypto coins, a person (or group of people) would buy expensive computers and spend a lot of time and money running them to perform the difficult calculations to generate crypto coins. This research aims to find out potential gaps in current methodologies and develop a solution that can fulfil the gap. It also aims to find out what type of crypto mining methodologies are being applied, apart from crypto-mining, what other security risks may it introduce, and how current web standards are tackling this problem.'},
-#     {'id': 5, 'title': 'Artificial Intelligence in Health Informatics', 'supervisor': 'Artificial Intelligence in Health Informatics', 'short_description': 'Utilizing AI to analyze health datasets for predictive modeling.', 'long_description': 'The project aims to use multiple publicly available health datasets to formulate a different dataset that may have features from the original set along with new ones developed through feature engineering. The dataset will then be used to build predictive model based on both general and deep learning based algorithm. The findings will be analysed and compared to similar research works.'},
-#     {'id': 6, 'title': 'Unsupervised Model Development from Autism Screening Data', 'supervisor': 'Asif Karim', 'short_description': 'Developing a two-cluster solution for autism screening.', 'long_description': 'The proposed system will present a two-cluster solution from a given dataset which will group toddlers based on multiple common medical traits. In depth literature survey of similar studies, both supervised and unsupervised will be carried out before the cluster-based model is implemented. The solution will be validated using both External and Internal validation measures and statistical significance tests.'},
-#     {'id': 7, 'title': 'Applying Artificial Intelligence to solve real world problems', 'supervisor': 'Bharanidharan Shanmugam', 'short_description': 'Exploring AI applications in solving real-world problems.', 'long_description': 'Artificial Intelligence has been used in many applications to solve certain problems throughout academia and the industry  from electricity to writing text. AI has a multitude of applications and this project will pick up a problem and explore the applications of AI with minimal human intervention. Examples of applications include building a bot, predicting the power usage, spam filtering and the list is endless.'}
-# ]
-
-# def thesis_list(request):
-#     return render(request, 'app_week6/thesis_list.html', {'theses': mock_theses})
-
-# def thesis_details(request, thesis_id):
-#     thesis = next((item for item in mock_theses if item['id'] == thesis_id), None)
-#     if thesis is None:
-#         return render(request, '404.html', {'error': "The requested thesis does not exist."})
-#     return render(request, 'app_week6/thesis_details.html', {'thesis': thesis})
-
-# def home(request):
-#     return render(request, 'app_week6/index.html')
-
-# def about(request):
-#     team_data = {
-        
-#             'name_1': 'Sujan Kandel', 'student_id_1': 'S360707', 
-#             'name_2': 'Nikesh Poudel', 'student_id_2': 'S362818',
-#             'name_3': 'Sanish Thakur', 'student_id_3': 'S362084',
-#             'name_4': 'Ajay Adhikari', 'student_id_4': 'S361935',
-        
-#     }
-#     return render(request,'app_week6/about.html', team_data)
-
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -47,6 +7,20 @@ from .form import UserLoginForm
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
+from .form import ThesisForm  # Assuming you have a form for editing the thesis
+
+
+
+@login_required
+def delete_thesis(request, thesis_id):
+    thesis = get_object_or_404(Thesis, id=thesis_id)
+    if request.user.user_type != 3 :
+        return redirect('view_theses')
+    if request.method == 'POST':
+        thesis.delete()
+        return redirect('view_theses')
+    return render(request, 'app_week6/delete_thesis_confirm.html', {'thesis': thesis})
 
 
 def register(request):
@@ -170,7 +144,7 @@ def thesis_detail(request, thesis_id):
 @login_required
 def edit_thesis(request, thesis_id):
     thesis = Thesis.objects.get(pk=thesis_id)
-    if (request.user.user_type == 4):
+    if (request.user.user_type == 4 or request.user.user_type == 3):
         if request.method == 'POST':
             form = ThesisForm(request.POST, instance=thesis)
             if form.is_valid():

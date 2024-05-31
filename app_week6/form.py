@@ -49,3 +49,9 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = User
         fields = ('username', 'email', 'user_type')
+        
+#for delete and edit 
+class ThesisForm(forms.ModelForm):
+    class Meta:
+        model = Thesis
+        fields = ['title', 'description', 'software_engineering', 'Information_Systems_and_Data_Science', 'Mechanical_Engineering', 'Civil_and_Structural_Engineering', 'Chemical_Engineering', 'External', 'Internal_Sydney', 'Internal_Casuarina']

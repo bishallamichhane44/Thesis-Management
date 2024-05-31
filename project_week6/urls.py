@@ -29,6 +29,7 @@ from django.contrib import admin
 from django.urls import path
 from app_week6 import views
 
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('blank/',views.blank,name='blank'),
@@ -48,6 +49,8 @@ urlpatterns = [
     path('view_theses/<int:thesis_id>/', views.thesis_detail, name='view_theses'),
     path('approve_student/<int:thesis_id>/<int:student_id>/', views.approve_student, name='approve_student'),
     path('your_theses/', views.your_theses, name='your_theses'),
+    path('theses/edit/<int:thesis_id>/', views.edit_thesis, name='edit_thesis'),
+    path('theses/delete/<int:thesis_id>/', views.delete_thesis, name='delete_thesis'),
     
 ]
 

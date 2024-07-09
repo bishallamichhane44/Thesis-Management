@@ -1,19 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Edit Thesis</title>
-</head>
-<body>
-    <div class="container mx-auto">
-        <h1 class="text-2xl font-bold mb-4">Edit Thesis</h1>
-        <form method="post">
+{% extends 'app_week6/base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+            <h1 class="text-3xl font-bold text-white">Edit Thesis</h1>
+        </div>
+        <form method="post" class="p-6 space-y-6">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Save Changes</button>
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.title.label }}
+                    </label>
+                    {{ form.title }}
+                </div>
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.description.label }}
+                    </label>
+                    {{ form.description }}
+                </div>
+            </div>
+            
+            <div class="mt-8">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Thesis Tags</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    {% for field in form %}
+                        {% if field.name != 'title' and field.name != 'description' %}
+                            <div class="flex items-center">
+                                {{ field }}
+                                <label for="{{ field.id_for_label }}" class="ml-2 block text-sm text-gray-900">
+                                    {{ field.label }}
+                                </label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-6">
+                <a href="{% url 'view_theses' %}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Cancel
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save Changes
+                button>
+            </div>
         </form>
     </div>
-</body>
-</html>
+</div>
+
+<style>
+    .form-checkbox {
+        @apply rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50;
+    }
+</style>
+{% endblock content %}

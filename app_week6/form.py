@@ -51,7 +51,40 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'email', 'user_type')
         
 #for delete and edit 
+
+
 class ThesisForm(forms.ModelForm):
+    # Define tag fields as BooleanFields
+    software_engineering = forms.BooleanField(required=False, label="Software Engineering")
+    Information_Systems_and_Data_Science = forms.BooleanField(required=False, label="Information Systems and Data Science")
+    Mechanical_Engineering = forms.BooleanField(required=False, label="Mechanical Engineering")
+    Civil_and_Structural_Engineering = forms.BooleanField(required=False, label="Civil and Structural Engineering")
+    Chemical_Engineering = forms.BooleanField(required=False, label="Chemical Engineering")
+    External = forms.BooleanField(required=False, label="External")
+    Internal_Sydney = forms.BooleanField(required=False, label="Internal Sydney")
+    Internal_Casuarina = forms.BooleanField(required=False, label="Internal Casuarina")
+
     class Meta:
         model = Thesis
-        fields = ['title', 'description', 'software_engineering', 'Information_Systems_and_Data_Science', 'Mechanical_Engineering', 'Civil_and_Structural_Engineering', 'Chemical_Engineering', 'External', 'Internal_Sydney', 'Internal_Casuarina']
+        fields = ['title', 'description', 'software_engineering', 'Information_Systems_and_Data_Science', 
+                  'Mechanical_Engineering', 'Civil_and_Structural_Engineering', 'Chemical_Engineering', 
+                  'External', 'Internal_Sydney', 'Internal_Casuarina']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500',
+                'placeholder': 'Enter thesis title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500',
+                'rows': 4,
+                'placeholder': 'Enter thesis description'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ThesisForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            if isinstance(self.fields[field], forms.BooleanField):
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-checkbox h-5 w-5 text-blue-600',
+                })

@@ -1,108 +1,101 @@
 {% extends 'app_week6/base.html' %}
 {% block content %}
-<div class="container mx-auto p-4 flex flex-col items-center justify-center">
-    <h1 class="text-4xl font-bold text-gray-700 mb-6">{{ thesis.title }}</h1>
-    <div class="flex flex-row items-start justify-start w-1/2 mb-6 space-x-6">
-        
-        <div class="flex flex-col items-start justify-start border border-gray-400 rounded-md p-4">
-            <h2 class="text-2xl font-bold text-gray-700">Details</h2>
-            <p class="text-gray-600">Students: {{ thesis.students.count }}</p>
-            <p class="text-gray-600">Is Approved: {{ thesis.is_approved }}</p>
-            <p class="text-gray-600">Supervisor: {{ thesis.supervisor }}</p>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">{{ thesis.title }}</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column: Details and Interested Students -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-gray-100 px-6 py-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Thesis Details</h2>
+                </div>
+                <div class="p-6 space-y-3">
+                    <p class="text-gray-700"><span class="font-semibold">Students:</span> {{ thesis.students.count }}</p>
+                    <p class="text-gray-700"><span class="font-semibold">Status:</span> {% if thesis.is_approved %}<span class="text-green-600">Approved</span>{% else %}<span class="text-red-600">Not Approved</span>{% endif %}</p>
+                    <p class="text-gray-700"><span class="font-semibold">Supervisor:</span> {{ thesis.supervisor }}</p>
+                </div>
+            </div>
+
+            {% if user.user_type != 4 %}
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-gray-100 px-6 py-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Interested Students</h2>
+                </div>
+                <div class="p-6">
+                    <ul class="divide-y divide-gray-200">
+                        {% for student in thesis.interested.all %}
+                            <li class="py-3 flex justify-between items-center">
+                                <span class="text-gray-700">{{ student.username }}</span>
+                                {% if not student in thesis.students.all %}
+                                    <a href="{% url 'approve_student' thesis.id student.id %}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300">Approve</a>
+                                {% endif %}
+                            </li>
+                        {% empty %}
+                            <li class="py-3 text-gray-600">No interested students yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% if user.user_type != 4 %}
 
-        
-            
-            
-        <div class="flex flex-col items-start justify-start border border-gray-400 rounded-md p-4">
-            <p class="text-gray-600">Interested students:</p>
-            <ul>
-                {% for student in thesis.interested.all %}
-                    <li>{{ student.username }}</li>
-                    <li>
-                        {% if not student in thesis.students.all %}
-                            <a href="{% url 'approve_student' thesis.id student.id %}" class="text-blue-600 hover:text-blue-800">Approve</a>
-                        {% endif %}
-                    </li>
-                    
-                {% endfor %}
-            </ul>
-            
+        <!-- Right Column: Overview, Fields, and Attachments -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-gray-100 px-6 py-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Overview</h2>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700 mb-6">{{ thesis.description|safe }}</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Fields of Study</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                {% for field, value in thesis.get_fields %}
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">{{ field }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ value }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="bg-gray-100 px-6 py-4">
+                    <h2 class="text-2xl font-semibold text-gray-800">Attachments</h2>
+                </div>
+                <div class="p-6">
+                    <ul class="divide-y divide-gray-200">
+                        {% for file in thesis.files.all %}
+                            <li class="py-3">
+                                <a href="{{ file.file.url }}" download="{{ file.file.name }}" class="text-blue-600 hover:text-blue-800 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                    {{ file.file.name }}
+                                </a>
+                            </li>
+                        {% empty %}
+                            <li class="py-3 text-gray-600">No attachments available.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% endif %}
-
-
-
     </div>
- 
-    <div class="flex flex-col items-center justify-center w-1/2 mb-6">
-        <div class="flex flex-col items-center justify-center border border-gray-400 rounded-md p-4">
-            <h2 class="text-2xl font-bold text-gray-700">Overview</h2>
-            <p class="text-gray-600">{{ thesis.description|safe }}</p>
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Software Engineering</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.software_engineering }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Information Systems and Data Science</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Information_Systems_and_Data_Science }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Mechanical Engineering</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Mechanical_Engineering }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Civil and Structural Engineering</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Civil_and_Structural_Engineering }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Chemical Engineering</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Chemical_Engineering }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">External</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.External }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Internal Sydney</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Internal_Sydney }}</td>
-                    </tr>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">Internal Casuarina</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ thesis.Internal_Casuarina }}</td>
-                    </tr>
-                </tbody>
-            </table>
-          
-        </div>
 
-
-     
-        <div class="flex flex-col items-center justify-center border border-gray-400 rounded-md p-4 mt-6">
-            <h2 class="text-2xl font-bold text-gray-700">Attachments</h2>
-            {% for file in thesis.files.all %}
-            <p class="text-gray-600">
-                <a href="{{ file.file.url }}" download="{{ file.file.name }}">{{ file.file.name }}</a>
-            </p>
-            {% endfor %}
-        </div>
-
-        {% if user.user_type == 3 %}
-        <div class="flex justify-center py-4 px-4 border-t-2 border-b-2 border-gray-400 w-auto text-white bg-green-600 hover:bg-green-700 my-6">
-            <a href="{% url 'edit_thesis' thesis.id %}" class="text-white hover:text-white font-bold uppercase tracking-wide">Edit</a>
-        </div>
-        {% endif %}
+    {% if user.user_type == 3 %}
+    <div class="mt-8 text-center">
+        <a href="{% url 'edit_thesis' thesis.id %}" class="inline-block px-6 py-3 bg-green-600 text-white font-bold uppercase tracking-wide rounded-full hover:bg-green-700 transition-colors duration-300">Edit Thesis</a>
     </div>
+    {% endif %}
 </div>
-
-
 {% endblock content %}

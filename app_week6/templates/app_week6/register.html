@@ -1,80 +1,104 @@
 {% extends 'app_week6/base.html' %}
 
+{% block extra_head %}
+<style>
+    .gradient-bg {
+        background: linear-gradient(120deg, #4a90e2, #6cb2eb);
+    }
+    .blob {
+        animation: blob-animation 15s infinite;
+    }
+    @keyframes blob-animation {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(5%, 5%) scale(1.1); }
+        50% { transform: translate(-5%, 10%) scale(0.9); }
+        75% { transform: translate(10%, -5%) scale(1.05); }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="relative flex justify-center items-center min-h-screen bg-gray-100 overflow-hidden">
-    <!-- Background blobs -->
-    <div class="absolute top-0 left-0 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="absolute top-0 right-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform translate-x-1/2 -translate-y-1/2"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform -translate-x-1/2 translate-y-1/2"></div>
-    <div class="absolute bottom-0 right-0 w-64 h-64 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 transform translate-x-1/2 translate-y-1/2"></div>
+<div class="relative flex justify-center items-center min-h-screen gradient-bg overflow-hidden">
+    <!-- Animated background blobs -->
+    <div class="absolute top-0 left-0 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 blob"></div>
+    <div class="absolute top-0 right-0 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 blob"></div>
+    <div class="absolute bottom-0 left-0 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 blob"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 blob"></div>
 
     <!-- Main content -->
-    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-8 z-10">
-        <form method="POST" novalidate>
+    <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 z-10">
+        <form method="POST" novalidate class="space-y-6">
             {% csrf_token %}
-            <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Create Your Account</h2>
+            
             <div class="space-y-4">
                 <div>
-                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.username.label }}</label>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">Username</label>
                     {{ form.username }}
                     {% if form.username.errors %}
-                        <p class="text-red-500 text-xs italic">{{ form.username.errors }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ form.username.errors.0 }}</p>
                     {% endif %}
                 </div>
+                
                 <div>
-                    <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.password1.label }}</label>
+                    <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">Password</label>
                     {{ form.password1 }}
                     {% if form.password1.errors %}
-                        <p class="text-red-500 text-xs italic">{{ form.password1.errors }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ form.password1.errors.0 }}</p>
                     {% endif %}
                 </div>
+                
                 <div>
-                    <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.password2.label }}</label>
+                    <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                     {{ form.password2 }}
                     {% if form.password2.errors %}
-                        <p class="text-red-500 text-xs italic">{{ form.password2.errors }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ form.password2.errors.0 }}</p>
                     {% endif %}
                 </div>
 
-                <!-- 
-                    Lets any new user create account as any role.
-                -->
                 <div>
-                    <label for="{{ form.user_type.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.user_type.label }}</label>
+                    <label for="{{ form.user_type.id_for_label }}" class="block text-sm font-medium text-gray-700">User Type</label>
                     {{ form.user_type }}
                     {% if form.user_type.errors %}
-                        <p class="text-red-500 text-xs italic">{{ form.user_type.errors }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ form.user_type.errors.0 }}</p>
                     {% endif %}
                 </div>
-
-                <!-- 
-                   Lets new user create account only as student
-                
-
-                <div class="mt-4">
-					<label for="{{ form.user_type.id_for_label }}" class="block text-sm font-medium text-gray-700">
-						{{ form.user_type.label }}
-					</label>
-					<select id="{{ form.user_type.id_for_label }}" name="{{ form.user_type.name }}" class="block w-full px-4 py-2 mt-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-						{% for value, label in form.user_type.field.choices %}
-							{% if value == 4 %}
-								<option value="{{ value }}" {% if value == form.user_type.value %}selected{% endif %}>{{ label }}</option>
-							{% endif %}
-						{% endfor %}
-					</select>
-					{% if form.user_type.errors %}
-						<p class="text-red-500 text-xs italic">{{ form.user_type.errors }}</p>
-					{% endif %}
-				</div>
-
-                -->
-
-
             </div>
-            <div class="mt-6 flex justify-center">
-                <input type="submit" value="Register" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer" />
+
+            <div class="mt-8">
+                <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:-translate-y-1">
+                    Create Account
+                </button>
             </div>
         </form>
+        
+        <p class="mt-6 text-center text-sm text-gray-600">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="font-medium text-blue-600 hover:text-blue-500">Sign in</a>
+        </p>
     </div>
 </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Enhance form fields with custom styling
+    document.querySelectorAll('input:not([type="submit"]), select').forEach(field => {
+        field.classList.add('mt-1', 'block', 'w-full', 'rounded-md', 'border-gray-300', 'shadow-sm', 'focus:border-blue-300', 'focus:ring', 'focus:ring-blue-200', 'focus:ring-opacity-50');
+    });
+
+    // Add password visibility toggle
+    const passwordFields = document.querySelectorAll('input[type="password"]');
+    passwordFields.forEach(field => {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.innerHTML = '👁️';
+        toggleBtn.className = 'absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none';
+        toggleBtn.onclick = () => {
+            field.type = field.type === 'password' ? 'text' : 'password';
+        };
+        field.parentElement.style.position = 'relative';
+        field.parentElement.appendChild(toggleBtn);
+    });
+</script>
+{% endblock %}

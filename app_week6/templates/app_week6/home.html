@@ -1,47 +1,117 @@
 {% extends 'app_week6/base.html' %}
 
+{% block extra_head %}
+<style>
+    .gradient-bg {
+        background: linear-gradient(120deg, #4a90e2, #6cb2eb);
+    }
+    .feature-card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-    <!-- Hero Section -->
-    <div class="bg-blue-600 py-16">
-        <div class="container mx-auto px-6 text-center text-white">
-            <h1 class="text-4xl font-bold mb-4">Welcome to Thesis Management System</h1>
-            <p class="text-xl mb-8">Easily manage and track your thesis projects with our efficient system</p>
-            <a href="{% url 'login' %}" class="bg-white text-blue-600 font-semibold py-2 px-4 rounded-md shadow-md hover:bg-gray-200">
-                Upload Your Thesis
-            </a>
-        </div>
+<!-- Hero Section -->
+<div class="gradient-bg text-white py-20">
+    <div class="container mx-auto px-6 text-center">
+        <h1 class="text-5xl font-bold mb-4 animate-fade-in-down">Welcome to Thesis Management System</h1>
+        <p class="text-xl mb-8 animate-fade-in-up">Streamline your academic journey with our powerful thesis management platform</p>
+        <a href="{% url 'login' %}" class="bg-white text-blue-600 font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+            Get Started
+        </a>
     </div>
+</div>
 
-    <!-- Features Section -->
-    <div class="container mx-auto px-6 py-16">
-        <h2 class="text-3xl font-bold text-center mb-12">Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div class="text-center">
-                <img src="https://source.unsplash.com/1600x900/?document" alt="Document Management" class="mx-auto mb-4 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Document Management</h3>
-                <p class="text-gray-600">Efficiently manage and organize your thesis documents in one place.</p>
+<!-- Features Section -->
+<div class="container mx-auto px-6 py-20">
+    <h2 class="text-4xl font-bold text-center mb-16">Why Choose Us?</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="feature-card bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-5xl mb-6 text-blue-500">
+                <i class="fas fa-file-alt"></i>
             </div>
-            <div class="text-center">
-                <img src="https://source.unsplash.com/1600x900/?collaboration" alt="Collaboration" class="mx-auto mb-4 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Collaboration</h3>
-                <p class="text-gray-600">Collaborate with your advisors and peers seamlessly.</p>
+            <h3 class="text-2xl font-semibold mb-4">Smart Document Management</h3>
+            <p class="text-gray-600">Organize, track, and version control your thesis documents with ease.</p>
+        </div>
+        <div class="feature-card bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-5xl mb-6 text-green-500">
+                <i class="fas fa-users"></i>
             </div>
-            <div class="text-center">
-                <img src="https://source.unsplash.com/1600x900/?security" alt="Security" class="mx-auto mb-4 rounded-lg shadow-md">
-                <h3 class="text-xl font-semibold mb-2">Security</h3>
-                <p class="text-gray-600">Keep your thesis projects secure with our robust security features.</p>
+            <h3 class="text-2xl font-semibold mb-4">Seamless Collaboration</h3>
+            <p class="text-gray-600">Work effortlessly with advisors and peers through integrated communication tools.</p>
+        </div>
+        <div class="feature-card bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-5xl mb-6 text-purple-500">
+                <i class="fas fa-shield-alt"></i>
             </div>
+            <h3 class="text-2xl font-semibold mb-4">Advanced Security</h3>
+            <p class="text-gray-600">Protect your intellectual property with state-of-the-art encryption and access controls.</p>
         </div>
     </div>
+</div>
 
-    <!-- Call to Action Section -->
-    <div class="bg-gray-100 py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold mb-4">Get Started Today</h2>
-            <p class="text-xl mb-8">Join us and make your thesis management easier than ever.</p>
-            <a href="{% url 'register' %}" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:bg-blue-700">
-                Create an Account
-            </a>
+<!-- Testimonial Section -->
+<div class="bg-gray-100 py-20">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-16">What Our Users Say</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <p class="text-gray-600 mb-4">"This platform has revolutionized how I manage my thesis. The collaboration features are simply outstanding!"</p>
+                <div class="flex items-center">
+                    <img src="/api/placeholder/50/50" alt="User" class="rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold">Sarah Johnson</h4>
+                        <p class="text-gray-500">PhD Candidate, Computer Science</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <p class="text-gray-600 mb-4">"As a supervisor, I find this system incredibly helpful in tracking and guiding my students' progress."</p>
+                <div class="flex items-center">
+                    <img src="/api/placeholder/50/50" alt="User" class="rounded-full mr-4">
+                    <div>
+                        <h4 class="font-semibold">Dr. Michael Chen</h4>
+                        <p class="text-gray-500">Professor, Engineering</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="gradient-bg text-white py-20">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl font-bold mb-4">Ready to Excel in Your Academic Journey?</h2>
+        <p class="text-xl mb-8">Join thousands of students and researchers who have transformed their thesis management experience.</p>
+        <a href="{% url 'register' %}" class="bg-white text-blue-600 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+            Create Your Free Account
+        </a>
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Add any additional JavaScript for animations or interactivity here
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Example: Add a scroll reveal effect to feature cards
+        const featureCards = document.querySelectorAll('.feature-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        featureCards.forEach(card => observer.observe(card));
+    });
+</script>
+{% endblock %}

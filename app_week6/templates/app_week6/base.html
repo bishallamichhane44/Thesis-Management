@@ -1,74 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thesis Management</title>
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="h-screen bg-gray-100">
-    <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
-        <h1 class="text-4xl font-bold">Thesis Management</h1>
-    
-        <div class="flex items-center space-x-4">
-            {% if user.user_type == 1 %}
-            <p class="bg-gray-700 py-2 px-3 rounded-lg">Admin</p>
-            {% elif user.user_type == 2 %}
-            <p class="bg-gray-700 py-2 px-3 rounded-lg">Supervisor</p>
-            {% elif user.user_type == 3 %}
-            <p class="bg-gray-700 py-2 px-3 rounded-lg">Project Coordinator</p>
-            {% elif user.user_type == 4 %}
-            <p class="bg-gray-700 py-2 px-3 rounded-lg">Student</p>
-            {% endif %}
-    
-            {% if user.is_authenticated %}
+<body class="min-h-screen bg-gray-100 flex flex-col">
+    <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Thesis Management</h1>
             <div class="flex items-center space-x-4">
-                <p class="text-gray-300">{{ user.username }}</p>
-                <a href="{% url 'logout' %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300">
-                    Log out
-                </a>
+                {% if user.is_authenticated %}
+                    <span class="bg-blue-500 text-sm py-1 px-3 rounded-full">
+                        {% if user.user_type == 1 %}Admin
+                        {% elif user.user_type == 2 %}Supervisor
+                        {% elif user.user_type == 3 %}Project Coordinator
+                        {% elif user.user_type == 4 %}Student
+                        {% endif %}
+                    </span>
+                    <span class="text-sm">{{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded transition duration-300">
+                        Log out
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded transition duration-300">
+                        Log In
+                    </a>
+                {% endif %}
             </div>
-            {% else %}
-            <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                Log In
-            </a>
-            {% endif %}
         </div>
     </header>
-    
 
- 
-    <div class="flex flex-wrap justify-center">{% include "app_week6/alert.html" %}</div>
-    
-
-    <nav class="bg-gray-200 p-4">
-        <ul class="flex flex-wrap justify-center">
-            {% if not user.is_authenticated %}
-            <li class="mr-4"><a href="{% url 'home' %}" class="text-gray-800 px-4 py-2 rounded">Home</a></li>
-            <li class="mr-4"><a href="{% url 'register' %}" class="text-gray-800 px-4 py-2 rounded">Register</a></li>
-            {% endif %}
-            {% if not user.user_type == 4%}
-            {% if user.is_authenticated %}
-            <li class="mr-4"><a href="{% url 'upload_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Upload Thesis</a></li>
-            <li class="mr-4"><a href="{% url 'approve_thesis' %}" class="text-gray-800 px-4 py-2 rounded">Approve Theses</a></li>
-            {% endif %}
-            {% endif %}
-            {% if user.is_authenticated %}
-            <li class="mr-4"><a href="{% url 'view_theses' %}" class="text-gray-800 px-4 py-2 rounded">View Theses</a></li>
-            {% if user.user_type == 5 %}
-            <li class="mr-4"><a href="{% url 'create_group' %}" class="text-gray-800 px-4 py-2 rounded">Create Group</a></li>
-            {% endif %}
-            {% if user.user_type == 4 %}
-            <li class="mr-4"><a href="{% url 'your_theses' %}" class="text-gray-800 px-4 py-2 rounded">Your Theses</a></li>
-            {% endif %}
-            {% endif %}
-            
-        </ul>
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4">
+            <ul class="flex flex-wrap justify-center py-2">
+                {% if not user.is_authenticated %}
+                    <li class="mx-2 my-1"><a href="{% url 'home' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Home</a></li>
+                    <li class="mx-2 my-1"><a href="{% url 'register' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Register</a></li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    {% if user.user_type != 4 %}
+                        <li class="mx-2 my-1"><a href="{% url 'upload_thesis' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Upload Thesis</a></li>
+                        <li class="mx-2 my-1"><a href="{% url 'approve_thesis' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Approve Theses</a></li>
+                    {% endif %}
+                    <li class="mx-2 my-1"><a href="{% url 'view_theses' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">View Theses</a></li>
+                    {% if user.user_type == 5 %}
+                        <li class="mx-2 my-1"><a href="{% url 'create_group' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Create Group</a></li>
+                    {% endif %}
+                    {% if user.user_type == 4 %}
+                        <li class="mx-2 my-1"><a href="{% url 'your_theses' %}" class="text-blue-600 hover:text-blue-800 px-3 py-2 rounded transition duration-300">Your Theses</a></li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
     </nav>
 
-    <div class="container mx-auto p-4">
-        {% block content %}
-        
-        {% endblock %}
+    <div class="container mx-auto px-4 py-6 flex-grow">
+        {% include "app_week6/alert.html" %}
+        {% block content %}{% endblock %}
     </div>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Thesis Management. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
-
